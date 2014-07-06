@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <title> Eye test </title>
+        <style>
+            #letters {
+                font-family: monospace;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id='letters'>
+        </div>
+    <script>
+    (function() {
+        'use strict';
+
+        // Number of rows of letters
+        var NUM_ROWS = 8;
+        // font size scaling per row
+        var SCALING_FONT_SIZE = [1, 0.5, 0.333, 0.25, 0.20, 0.15, 0.10, 0.075];
+        // line height scaling per row
+        var SCALING_LINE_HEIGHT = [1, 0.5, 0.333, 0.25, 0.20, 0.15, 0.15, 0.15];
+        // top row font size
+        var ROOT_SIZE_MM = 72;
+
+        function getLetters(len) {
+            var letters = [];
+            for (var i = 0; i < len; i++) {
+                var r = Math.floor(Math.random() * 26);
+                letters[i] = String.fromCharCode('A'.charCodeAt(0) + r);
+            }
+            return letters;
+        }
+
+        function scaleElement(el, index) {
+            var fontSize = SCALING_FONT_SIZE[index] * ROOT_SIZE_MM
+            el.style.fontSize = fontSize + 'mm';
+            el.style.lineHeight = SCALING_LINE_HEIGHT[index] * ROOT_SIZE_MM + 'mm';
+            var computed = window.getComputedStyle(el);
+            var padding = Math.ceil(parseInt(computed.fontSize, 10) * 0.25);
+            var spans = el.children;
+            for (var i = 0; i < spans.length; i++) {
+                spans[i].style.paddingLeft = padding + 'px';
+                spans[i].style.paddingRight = padding + 'px';
+            }
+        }
+
+        var lettersDiv = document.getElementById('letters');
+        for (var i = 0; i < NUM_ROWS; i++) {
+            var rowEl = document.createElement('div');
+            rowEl.className = 'row row-' + (i + 1);
+            var letters = getLetters(i + 1);
+            var rowContent = '';
+            for (var j = 0; j < letters.length; j++) {
+                rowContent += '<span>' + letters[j] + '</span>';
+            }
+            rowEl.innerHTML = rowContent;
+            lettersDiv.appendChild(rowEl);
+
+            scaleElement(rowEl, i);
+        }
+
+    }());
+
+    </script>
+
+    </body>
+</html>
