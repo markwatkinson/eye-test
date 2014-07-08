@@ -24,11 +24,26 @@
         // top row font size
         var ROOT_SIZE_MM = 72;
 
+        var ALPHABET = (function() {
+            var a = [];
+            for (var i = 0; i < 26; i++) {
+                a[i] = String.fromCharCode('A'.charCodeAt(0) + i);
+            }
+            return a;
+        }());
+
+
         function getLetters(len) {
             var letters = [];
-            for (var i = 0; i < len; i++) {
-                var r = Math.floor(Math.random() * 26);
-                letters[i] = String.fromCharCode('A'.charCodeAt(0) + r);
+            // make sure we don't get any repetitions by removing chosen
+            // letters from the alphabet. We'll make a local clone and edit it.
+            var alphabet = ALPHABET.slice(0);
+            while (letters.length < len) {
+                var randomIndex = Math.floor(Math.random() * alphabet.length);
+                var randomLetter = alphabet[randomIndex];
+                letters.push(randomLetter);
+                // remove it.
+                alphabet.splice(randomIndex, 1);
             }
             return letters;
         }
